@@ -4,150 +4,559 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>G19 VMT - Advanced Minute Transcribing Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #e0f7fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            text-align: center;
             color: #333;
         }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
         }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
         h1 {
-            color: #00796b;
+            color: #1a1a2e;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
+        
+        h1 i {
+            color: #667eea;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
         button {
-            padding: 12px 24px;
-            margin: 10px;
-            font-size: 16px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
             border: none;
-            border-radius: 6px;
-            background-color: #009688;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
+        
         button:hover {
-            background-color: #00796b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
         button:disabled {
-            background-color: #b2dfdb;
+            background: linear-gradient(135deg, #a0a0a0 0%, #808080 100%);
             cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
+        
+        button.secondary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        button.secondary:hover {
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+        }
+        
+        button.danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+        }
+        
+        button.danger:hover {
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
+        }
+        
+        button.warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+        }
+        
+        button.warning:hover {
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5);
+        }
+        
+        .file-upload {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .file-upload:hover .file-upload-label {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .section-header i {
+            color: #667eea;
+            font-size: 1.4rem;
+        }
+        
+        .section-header h2 {
+            color: #1a1a2e;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        #status {
+            margin: 20px 0;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #e3f2fd;
+            color: #1565c0;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        #status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        #status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        #status.warning {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #language {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 30px;
+            color: #667eea;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
         #transcript, #minutesContent {
             width: 100%;
             min-height: 200px;
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-top: 20px;
+            border: 2px solid #e9ecef;
+            padding: 20px;
             text-align: left;
-            background-color: #f9f9f9;
-            border-radius: 6px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.7;
+            transition: all 0.3s ease;
         }
+        
+        #transcript:empty:before {
+            content: 'Transcript will appear here...';
+            color: #aaa;
+            font-style: italic;
+        }
+        
         #minutes {
             margin-top: 30px;
             display: none;
         }
-        #status {
-            margin-top: 15px;
-            font-style: italic;
-            color: #555;
-        }
-        #language {
-            margin-top: 15px;
-            color: #00796b;
-        }
+        
         .edit-mode #minutesContent {
-            border: 1px solid #009688;
-            background-color: #e0f7fa;
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea08 0%, #764ba208 100%);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
-        .file-upload {
-            margin: 20px 0;
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-        }
-        .file-upload input {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .file-upload button {
-            background-color: #4caf50;
-        }
-        .file-upload button:hover {
-            background-color: #388e3c;
-        }
-        #audioPlayback {
+        
+        .minutes-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 20px;
+            justify-content: center;
         }
-        a {
-            color: #009688;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        
         #collaboration {
             margin-top: 30px;
-            padding: 15px;
-            background-color: #f0f8ff;
-            border-radius: 6px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%);
+            border-radius: 16px;
+            display: none;
         }
+        
+        #collaboration h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        
+        #collaboration h3 i {
+            color: #667eea;
+        }
+        
         #meetingId {
-            padding: 10px;
-            width: 300px;
-            margin: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 14px 20px;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
         }
+        
+        #meetingId:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        #collabStatus {
+            margin: 15px 0;
+            padding: 12px 20px;
+            background: #fff;
+            border-radius: 10px;
+            color: #666;
+        }
+        
         #onlineUsers {
             margin-top: 20px;
             text-align: left;
         }
+        
+        #onlineUsers h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+        
         #onlineUsers ul {
             list-style-type: none;
             padding: 0;
         }
+        
         #onlineUsers li {
-            background: #dff0d8;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            margin: 8px 0;
+            padding: 12px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
         }
+        
+        #onlineUsers li:before {
+            content: '\f007';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+        
         #videoSection {
             margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 16px;
             display: none;
         }
+        
+        #videoSection h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        
+        #videoSection h3 i {
+            color: #667eea;
+        }
+        
         #localVideoContainer, #remoteVideos {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            gap: 20px;
         }
+        
         .video-container {
-            margin: 10px;
             text-align: center;
+            background: #1a1a2e;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
+        
         video {
             width: 320px;
             height: 240px;
-            border: 1px solid #ccc;
-            background: black;
-            border-radius: 6px;
+            border-radius: 12px;
+            background: #000;
         }
+        
         .video-label {
-            margin-top: 5px;
+            margin-top: 10px;
             font-size: 14px;
-            color: #333;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .audio-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        #audioPlayback {
+            border-radius: 30px;
+            background: #1a1a2e;
+        }
+        
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .download-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            text-decoration: none;
+            color: white;
+        }
+        
+        /* Upload progress */
+        .upload-progress {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .progress-text {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* File info */
+        .file-info {
+            display: none;
+            margin: 15px 0;
+            padding: 15px 20px;
+            background: #e8f5e9;
+            border-radius: 12px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+        
+        .file-info i {
+            margin-right: 10px;
+        }
+        
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 28px;
+            background: #333;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+        
+        .toast.error {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button, .file-upload-label {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            video {
+                width: 100%;
+                max-width: 320px;
+                height: auto;
+                aspect-ratio: 4/3;
+            }
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Character count */
+        .char-count {
+            text-align: right;
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@3.0.0"></script>
@@ -158,58 +567,107 @@
 </head>
 <body>
     <div class="container">
-        <h1>G19 VMT</h1>
-        <p>Advanced Voice Meeting Transcriber with Real-time Collaboration and Multi-User Video</p>
+        <div class="header">
+            <h1><i class="fas fa-microphone-lines"></i> G19 VMT</h1>
+            <p class="subtitle">Advanced Voice Meeting Transcriber with Real-time Collaboration and Multi-User Video</p>
+        </div>
         
-        <button id="startBtn">Start Recording</button>
-        <button id="stopBtn" disabled>Stop Recording</button>
-        <button id="interpretBtn" disabled>Interpret and Generate Minutes</button>
+        <div class="controls">
+            <button id="startBtn"><i class="fas fa-circle"></i> Start Recording</button>
+            <button id="stopBtn" disabled><i class="fas fa-stop"></i> Stop Recording</button>
+            <button id="interpretBtn" disabled class="secondary"><i class="fas fa-magic"></i> Generate Minutes</button>
+            
+            <div class="file-upload">
+                <span class="file-upload-label"><i class="fas fa-upload"></i> Upload Audio</span>
+                <input type="file" id="audioUpload" accept="audio/*,.mp3,.wav,.ogg,.m4a,.webm,.flac">
+            </div>
+        </div>
         
-        <div class="file-upload">
-            <button>Upload Audio Recording</button>
-            <input type="file" id="audioUpload" accept="audio/*">
+        <div class="file-info" id="fileInfo">
+            <i class="fas fa-file-audio"></i>
+            <span id="fileName"></span>
+        </div>
+        
+        <div class="upload-progress" id="uploadProgress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Processing...</div>
         </div>
         
         <div id="status"></div>
-        <div id="language">Detected Language: <span id="detectedLang">Unknown</span></div>
         
-        <div id="transcript"></div>
-        
-        <div id="minutes">
-            <h2>Generated Minutes</h2>
-            <div id="minutesContent"></div>
-            <button id="editBtn">Edit Minutes</button>
-            <button id="saveBtn" style="display: none;">Save Changes</button>
+        <div id="language">
+            <i class="fas fa-language"></i>
+            Detected Language: <span id="detectedLang">Unknown</span>
         </div>
         
-        <div id="collaboration" style="display: none;">
-            <h3>Real-time Collaboration</h3>
-            <input type="text" id="meetingId" placeholder="Enter Meeting ID">
-            <button id="createCollabBtn">Create New Session</button>
-            <button id="joinCollabBtn">Join Session</button>
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-file-lines"></i>
+                <h2>Transcript</h2>
+            </div>
+            <div id="transcript"></div>
+        </div>
+        
+        <div id="minutes">
+            <div class="section">
+                <div class="section-header">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>Generated Minutes</h2>
+                </div>
+                <div id="minutesContent"></div>
+                <div class="char-count" id="charCount"></div>
+                <div class="minutes-actions">
+                    <button id="editBtn" class="warning"><i class="fas fa-edit"></i> Edit Minutes</button>
+                    <button id="saveBtn" class="secondary" style="display: none;"><i class="fas fa-save"></i> Save Changes</button>
+                    <button id="cancelBtn" class="danger" style="display: none;"><i class="fas fa-times"></i> Cancel</button>
+                    <button id="exportTxtBtn" class="secondary" style="display: none;"><i class="fas fa-file-alt"></i> Export as TXT</button>
+                    <button id="exportPdfBtn" style="display: none;"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+                    <button id="copyBtn" style="display: none;"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="collaboration">
+            <h3><i class="fas fa-users"></i> Real-time Collaboration</h3>
+            <input type="text" id="meetingId" placeholder="Enter Meeting ID to join...">
+            <div class="controls">
+                <button id="createCollabBtn" class="secondary"><i class="fas fa-plus"></i> Create New Session</button>
+                <button id="joinCollabBtn"><i class="fas fa-sign-in-alt"></i> Join Session</button>
+            </div>
             <p id="collabStatus"></p>
             <div id="onlineUsers">
-                <h4>Online Users:</h4>
+                <h4><i class="fas fa-circle" style="color: #4CAF50; font-size: 10px;"></i> Online Users</h4>
                 <ul id="userList"></ul>
             </div>
         </div>
         
         <div id="videoSection">
-            <h3>Video Conference</h3>
+            <h3><i class="fas fa-video"></i> Video Conference</h3>
             <div id="localVideoContainer">
                 <div class="video-container">
                     <video id="localVideo" autoplay playsinline muted></video>
-                    <div class="video-label">You</div>
+                    <div class="video-label"><i class="fas fa-user"></i> You</div>
                 </div>
             </div>
             <div id="remoteVideos"></div>
-            <button id="startVideoBtn" disabled>Start Video</button>
-            <button id="shareScreenBtn" disabled>Share Screen</button>
-            <button id="stopShareBtn" style="display: none;">Stop Sharing</button>
+            <div class="controls">
+                <button id="startVideoBtn" disabled class="secondary"><i class="fas fa-video"></i> Start Video</button>
+                <button id="shareScreenBtn" disabled><i class="fas fa-desktop"></i> Share Screen</button>
+                <button id="stopShareBtn" class="danger" style="display: none;"><i class="fas fa-stop"></i> Stop Sharing</button>
+            </div>
         </div>
         
-        <audio id="audioPlayback" controls style="display: none; margin-top: 20px;"></audio>
-        <a id="downloadLink" style="display: none; margin-left: 10px;">Download Audio</a>
+        <div class="audio-section" id="audioSection" style="display: none;">
+            <audio id="audioPlayback" controls></audio>
+            <a id="downloadLink" class="download-link"><i class="fas fa-download"></i> Download Audio</a>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
     </div>
 
     <script>
@@ -228,6 +686,7 @@
         const db = firebase.firestore();
         const rtdb = firebase.database();
 
+        // DOM Elements
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const interpretBtn = document.getElementById('interpretBtn');
@@ -239,6 +698,11 @@
         const minutesContent = document.getElementById('minutesContent');
         const editBtn = document.getElementById('editBtn');
         const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const exportTxtBtn = document.getElementById('exportTxtBtn');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const charCount = document.getElementById('charCount');
         const collaborationDiv = document.getElementById('collaboration');
         const meetingIdInput = document.getElementById('meetingId');
         const createCollabBtn = document.getElementById('createCollabBtn');
@@ -253,7 +717,16 @@
         const stopShareBtn = document.getElementById('stopShareBtn');
         const audioPlayback = document.getElementById('audioPlayback');
         const downloadLink = document.getElementById('downloadLink');
+        const audioSection = document.getElementById('audioSection');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
 
+        // State variables
         let mediaRecorder;
         let audioChunks = [];
         let recognition;
@@ -266,13 +739,14 @@
         let docRef = null;
         let unsubscribe = null;
         let isEditing = false;
+        let originalMinutes = '';
         let username = '';
         let userId = '';
         let meetingId = '';
         let localStream = null;
         let isSharingScreen = false;
         let screenTrack = null;
-        let peerConnections = {}; // {remoteUserId: {pc: RTCPeerConnection, video: HTMLVideoElement, label: HTMLDivElement}}
+        let peerConnections = {};
 
         const servers = {
             iceServers: [
@@ -281,18 +755,60 @@
             iceCandidatePoolSize: 10,
         };
 
+        // Supported audio formats - MIME types and corresponding extensions
+        const supportedMimeTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/webm', 'audio/mp4', 'audio/flac'];
+        const supportedExtensions = ['mp3', 'wav', 'ogg', 'webm', 'm4a', 'flac'];
+        const maxFileSize = 50 * 1024 * 1024; // 50MB
+
+        // Utility functions
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 
+                                                  type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-info-circle';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function updateStatus(message, type = '') {
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+            if (type === 'success') {
+                statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> ' + message;
+            } else if (type === 'error') {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + message;
+            } else if (type === 'warning') {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + message;
+            } else {
+                statusDiv.innerHTML = '<i class="fas fa-info-circle"></i> ' + message;
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function updateCharCount() {
+            const count = minutesContent.textContent.length;
+            charCount.textContent = `${count} characters`;
+        }
+
         // Initialize Transformers.js pipelines
         async function initPipelines() {
-            statusDiv.textContent = 'Loading AI models...';
+            updateStatus('Loading AI models... This may take a moment.', '');
             try {
                 const { pipeline } = Xenova;
                 asr = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en');
                 translator = await pipeline('translation', 'Xenova/nllb-200-distilled-600M');
                 summarizer = await pipeline('summarization', 'Xenova/bart-large-cnn');
-                statusDiv.textContent = 'AI models loaded.';
+                updateStatus('AI models loaded successfully!', 'success');
             } catch (error) {
                 console.error('Error loading models:', error);
-                statusDiv.textContent = 'Error loading AI models.';
+                updateStatus('Error loading AI models. Some features may not work.', 'error');
             }
         }
 
@@ -307,9 +823,9 @@
             };
         }
 
-        // Live Recording (unchanged)
+        // Live Recording
         startBtn.addEventListener('click', async () => {
-            statusDiv.textContent = 'Requesting microphone access...';
+            updateStatus('Requesting microphone access...', '');
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
@@ -323,11 +839,9 @@
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioPlayback.src = audioUrl;
-                    audioPlayback.style.display = 'block';
+                    audioSection.style.display = 'flex';
                     downloadLink.href = audioUrl;
                     downloadLink.download = 'recording.webm';
-                    downloadLink.textContent = 'Download Audio';
-                    downloadLink.style.display = 'inline';
                 };
 
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -350,91 +864,160 @@
                     transcriptDiv.textContent = transcript;
 
                     if (finalTranscript.length > 20 && detectedLanguage === 'en') {
-                        const result = eld.detect(finalTranscript);
-                        if (result.isReliable() && result.language !== 'en') {
-                            detectedLanguage = result.language;
-                            detectedLangSpan.textContent = detectedLanguage;
-                            recognition.lang = `${detectedLanguage}-${detectedLanguage.toUpperCase()}`;
-                            statusDiv.textContent = `Language detected: ${detectedLanguage}. Switching recognition.`;
+                        try {
+                            const result = eld.detect(finalTranscript);
+                            if (result.isReliable() && result.language !== 'en') {
+                                detectedLanguage = result.language;
+                                detectedLangSpan.textContent = detectedLanguage;
+                                recognition.lang = `${detectedLanguage}-${detectedLanguage.toUpperCase()}`;
+                                updateStatus(`Language detected: ${detectedLanguage}. Switching recognition.`, 'success');
+                            }
+                        } catch (e) {
+                            console.log('Language detection not available');
                         }
                     }
                 };
 
                 recognition.onerror = (event) => {
                     console.error('Recognition error:', event.error);
-                    statusDiv.textContent = `Error: ${event.error}`;
+                    updateStatus(`Recognition error: ${event.error}`, 'error');
                 };
 
                 recognition.onend = () => {
                     startBtn.disabled = false;
                     stopBtn.disabled = true;
                     interpretBtn.disabled = false;
-                    statusDiv.textContent = 'Recording stopped.';
+                    updateStatus('Recording stopped.', 'success');
                 };
 
                 mediaRecorder.start();
                 recognition.start();
                 startBtn.disabled = true;
                 stopBtn.disabled = false;
-                statusDiv.textContent = 'Recording...';
+                updateStatus('Recording in progress...', '');
+                showToast('Recording started!');
             } catch (error) {
                 console.error('Error accessing microphone:', error);
-                statusDiv.textContent = 'Error accessing microphone. Please check permissions.';
+                updateStatus('Error accessing microphone. Please check permissions.', 'error');
             }
         });
 
         stopBtn.addEventListener('click', () => {
             if (mediaRecorder) mediaRecorder.stop();
             if (recognition) recognition.stop();
+            showToast('Recording stopped!');
         });
 
-        // Upload Audio (unchanged)
+        // Upload Audio with validation and progress
         audioUpload.addEventListener('change', async (event) => {
             const file = event.target.files[0];
             if (!file) return;
 
-            statusDiv.textContent = 'Processing uploaded audio...';
+            // Validate file type
+            const fileType = file.type || '';
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const isValidType = supportedMimeTypes.some(mime => fileType === mime || fileType.startsWith(mime.split('/')[0])) ||
+                               supportedExtensions.includes(fileExtension);
+            
+            if (!isValidType) {
+                updateStatus('Unsupported file format. Please upload MP3, WAV, OGG, WebM, M4A, or FLAC files.', 'error');
+                showToast('Unsupported file format!', 'error');
+                audioUpload.value = '';
+                return;
+            }
+
+            // Validate file size
+            if (file.size > maxFileSize) {
+                updateStatus(`File too large. Maximum size is ${formatFileSize(maxFileSize)}.`, 'error');
+                showToast('File too large!', 'error');
+                audioUpload.value = '';
+                return;
+            }
+
+            // Show file info
+            fileName.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            fileInfo.style.display = 'block';
+            uploadProgress.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = 'Reading file...';
+
+            updateStatus('Processing uploaded audio...', '');
+
             try {
+                // Simulate progress for file reading
+                progressFill.style.width = '20%';
+                progressText.textContent = 'Loading audio file...';
+
                 const audioUrl = URL.createObjectURL(file);
                 audioPlayback.src = audioUrl;
-                audioPlayback.style.display = 'block';
+                audioSection.style.display = 'flex';
                 downloadLink.href = audioUrl;
                 downloadLink.download = file.name;
-                downloadLink.textContent = 'Download Uploaded Audio';
-                downloadLink.style.display = 'inline';
+
+                progressFill.style.width = '40%';
+                progressText.textContent = 'Transcribing audio...';
+
+                if (!asr) {
+                    throw new Error('Speech recognition model not loaded. Please wait for models to load.');
+                }
 
                 const audioData = await fetch(audioUrl).then(res => res.arrayBuffer());
+                
+                progressFill.style.width = '60%';
+                progressText.textContent = 'Running speech recognition...';
+
                 const transcription = await asr(audioData, { return_timestamps: false });
+                
+                progressFill.style.width = '80%';
+                progressText.textContent = 'Detecting language...';
+
                 finalTranscript = transcription.text;
                 transcript = finalTranscript;
                 transcriptDiv.textContent = transcript;
 
-                const result = eld.detect(finalTranscript);
-                if (result.isReliable()) {
-                    detectedLanguage = result.language;
-                    detectedLangSpan.textContent = detectedLanguage;
+                try {
+                    const result = eld.detect(finalTranscript);
+                    if (result.isReliable()) {
+                        detectedLanguage = result.language;
+                        detectedLangSpan.textContent = detectedLanguage;
+                    }
+                } catch (e) {
+                    console.log('Language detection not available');
                 }
 
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Complete!';
+
                 interpretBtn.disabled = false;
-                statusDiv.textContent = 'Audio uploaded and transcribed.';
+                updateStatus('Audio uploaded and transcribed successfully!', 'success');
+                showToast('Audio transcribed successfully!');
+
+                setTimeout(() => {
+                    uploadProgress.style.display = 'none';
+                }, 2000);
             } catch (error) {
                 console.error('Error processing audio:', error);
-                statusDiv.textContent = 'Error processing uploaded audio.';
+                updateStatus('Error processing uploaded audio: ' + error.message, 'error');
+                showToast('Error processing audio!', 'error');
+                uploadProgress.style.display = 'none';
             }
         });
 
-        // Generate Minutes (unchanged)
+        // Generate Minutes
         interpretBtn.addEventListener('click', async () => {
             if (!transcript) {
-                statusDiv.textContent = 'No transcript available.';
+                updateStatus('No transcript available.', 'warning');
                 return;
             }
-            statusDiv.textContent = 'Generating minutes...';
+            updateStatus('Generating minutes...', '');
+            interpretBtn.disabled = true;
+            interpretBtn.innerHTML = '<span class="loading"></span> Generating...';
+            
             try {
                 let textToSummarize = finalTranscript || transcript;
 
                 if (detectedLanguage !== 'en') {
-                    statusDiv.textContent = 'Translating to English...';
+                    updateStatus('Translating to English...', '');
                     const translationResult = await translator(textToSummarize, { tgt_lang: 'eng_Latn' });
                     textToSummarize = translationResult[0].translation_text;
                 }
@@ -447,12 +1030,131 @@
                 minutesContent.textContent = summary[0].summary_text;
                 minutesDiv.style.display = 'block';
                 collaborationDiv.style.display = 'block';
-                editBtn.style.display = 'inline';
-                saveBtn.style.display = 'none';
-                statusDiv.textContent = 'Minutes generated. You can now start real-time collaboration.';
+                editBtn.style.display = 'inline-flex';
+                exportTxtBtn.style.display = 'inline-flex';
+                exportPdfBtn.style.display = 'inline-flex';
+                copyBtn.style.display = 'inline-flex';
+                updateCharCount();
+                updateStatus('Minutes generated successfully! You can now edit or export.', 'success');
+                showToast('Minutes generated!');
             } catch (error) {
                 console.error('Error generating minutes:', error);
-                statusDiv.textContent = 'Error generating minutes.';
+                updateStatus('Error generating minutes: ' + error.message, 'error');
+            } finally {
+                interpretBtn.disabled = false;
+                interpretBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Minutes';
+            }
+        });
+
+        // Edit Minutes
+        editBtn.addEventListener('click', () => {
+            originalMinutes = minutesContent.textContent;
+            minutesContent.contentEditable = true;
+            minutesDiv.querySelector('.section').classList.add('edit-mode');
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'inline-flex';
+            cancelBtn.style.display = 'inline-flex';
+            updateStatus('Editing mode. Make your changes and click Save.', 'warning');
+            isEditing = true;
+            minutesContent.focus();
+
+            minutesContent.addEventListener('input', updateCharCount);
+
+            if (docRef) {
+                const debouncedUpdate = debounce(() => {
+                    docRef.update({ minutes: minutesContent.textContent });
+                }, 500);
+                minutesContent.addEventListener('input', debouncedUpdate);
+            }
+        });
+
+        // Save Minutes
+        saveBtn.addEventListener('click', () => {
+            minutesContent.contentEditable = false;
+            minutesDiv.querySelector('.section').classList.remove('edit-mode');
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            editBtn.style.display = 'inline-flex';
+            updateStatus('Changes saved successfully!', 'success');
+            showToast('Changes saved!');
+            isEditing = false;
+
+            if (docRef) {
+                docRef.update({ minutes: minutesContent.textContent });
+            }
+        });
+
+        // Cancel Edit
+        cancelBtn.addEventListener('click', () => {
+            minutesContent.textContent = originalMinutes;
+            minutesContent.contentEditable = false;
+            minutesDiv.querySelector('.section').classList.remove('edit-mode');
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            editBtn.style.display = 'inline-flex';
+            updateStatus('Changes discarded.', '');
+            showToast('Changes discarded', 'info');
+            isEditing = false;
+            updateCharCount();
+        });
+
+        // Export as TXT
+        exportTxtBtn.addEventListener('click', () => {
+            const content = minutesContent.textContent;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'meeting-minutes.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Minutes exported as TXT!');
+        });
+
+        // Export as PDF (simple HTML to print)
+        exportPdfBtn.addEventListener('click', () => {
+            const content = minutesContent.textContent;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Meeting Minutes</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }
+                        h1 { color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+                        .content { margin-top: 20px; }
+                        .footer { margin-top: 40px; font-size: 12px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Meeting Minutes</h1>
+                    <div class="content">${content}</div>
+                    <div class="footer">Generated by G19 VMT on ${new Date().toLocaleDateString()}</div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+            showToast('Print dialog opened for PDF export!');
+        });
+
+        // Copy to Clipboard
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(minutesContent.textContent);
+                showToast('Copied to clipboard!');
+            } catch (err) {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = minutesContent.textContent;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied to clipboard!');
             }
         });
 
@@ -467,6 +1169,7 @@
             collabStatus.textContent = `New session created: ${meetingId}. Share this ID to collaborate.`;
             videoSection.style.display = 'block';
             startVideoBtn.disabled = false;
+            showToast('Collaboration session created!');
         });
 
         // Join Collaboration Session
@@ -477,12 +1180,14 @@
             meetingId = meetingIdInput.value.trim();
             if (!meetingId) {
                 collabStatus.textContent = 'Please enter a Meeting ID.';
+                showToast('Please enter a Meeting ID', 'error');
                 return;
             }
             joinCollaboration(meetingId);
             collabStatus.textContent = `Joined session: ${meetingId}.`;
             videoSection.style.display = 'block';
             startVideoBtn.disabled = false;
+            showToast('Joined collaboration session!');
         });
 
         function joinCollaboration(mId) {
@@ -495,6 +1200,7 @@
                     const data = doc.data();
                     if (data.minutes && !isEditing) {
                         minutesContent.textContent = data.minutes;
+                        updateCharCount();
                     }
                 }
             });
@@ -523,14 +1229,13 @@
             // Listen for online users
             const presenceRef = rtdb.ref(`/presence/${meetingId}`);
             presenceRef.on('child_added', (snap) => {
-                if (snap.key === userId) return; // Skip self
+                if (snap.key === userId) return;
                 const remoteUsername = snap.val();
                 const li = document.createElement('li');
                 li.id = snap.key;
                 li.textContent = remoteUsername;
                 userList.appendChild(li);
 
-                // Create peer connection if not exists
                 if (!peerConnections[snap.key]) {
                     createRemoteVideo(snap.key, remoteUsername);
                     createPeerConnection(snap.key);
@@ -541,7 +1246,6 @@
                 const liToRemove = document.getElementById(snap.key);
                 if (liToRemove) liToRemove.remove();
 
-                // Clean up peer connection
                 if (peerConnections[snap.key]) {
                     peerConnections[snap.key].pc.close();
                     peerConnections[snap.key].video.parentNode.remove();
@@ -559,7 +1263,7 @@
             video.playsinline = true;
             const label = document.createElement('div');
             label.className = 'video-label';
-            label.textContent = remoteUsername;
+            label.innerHTML = `<i class="fas fa-user"></i> ${remoteUsername}`;
             container.appendChild(video);
             container.appendChild(label);
             remoteVideos.appendChild(container);
@@ -571,28 +1275,23 @@
             const pc = new RTCPeerConnection(servers);
             peerConnections[remoteUserId].pc = pc;
 
-            // Add local tracks
             localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
 
-            // Handle remote tracks
             pc.ontrack = (event) => {
                 const remoteStream = new MediaStream([event.track]);
                 peerConnections[remoteUserId].video.srcObject = remoteStream;
             };
 
-            // ICE connection state
             pc.oniceconnectionstatechange = () => {
                 if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'closed') {
-                    statusDiv.textContent = `Connection to ${remoteUserId} ${pc.iceConnectionState}.`;
+                    updateStatus(`Connection to ${remoteUserId} ${pc.iceConnectionState}.`, 'warning');
                 }
             };
 
-            // Signaling path
             const pairIds = [userId, remoteUserId].sort();
             const signalId = pairIds.join('_');
             const signalRef = docRef.collection('signals').doc(signalId);
 
-            // ICE candidates
             const offerCandidates = signalRef.collection('offerCandidates');
             const answerCandidates = signalRef.collection('answerCandidates');
 
@@ -603,7 +1302,6 @@
                 }
             };
 
-            // Listen for remote candidates
             const remoteCandidateCollection = (userId < remoteUserId) ? answerCandidates : offerCandidates;
             remoteCandidateCollection.onSnapshot(snapshot => {
                 snapshot.docChanges().forEach(change => {
@@ -616,14 +1314,11 @@
                 });
             });
 
-            // Decide initiator
             const isInitiator = userId < remoteUserId;
 
             if (isInitiator) {
-                // Create offer
                 createOffer(pc, signalRef);
             } else {
-                // Listen for offer
                 signalRef.onSnapshot(async (snapshot) => {
                     const data = snapshot.data();
                     if (data && data.offer && !pc.remoteDescription) {
@@ -634,13 +1329,12 @@
                             await signalRef.update({ answer });
                         } catch (error) {
                             console.error('Error handling offer:', error);
-                            statusDiv.textContent = 'Error in video connection.';
+                            updateStatus('Error in video connection.', 'error');
                         }
                     }
                 });
             }
 
-            // Listen for answer if initiator
             if (isInitiator) {
                 signalRef.onSnapshot(async (snapshot) => {
                     const data = snapshot.data();
@@ -649,7 +1343,7 @@
                             await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
                         } catch (error) {
                             console.error('Error setting answer:', error);
-                            statusDiv.textContent = 'Error in video connection.';
+                            updateStatus('Error in video connection.', 'error');
                         }
                     }
                 });
@@ -663,33 +1357,33 @@
                 await signalRef.set({ offer });
             } catch (error) {
                 console.error('Error creating offer:', error);
-                statusDiv.textContent = 'Error starting video call.';
+                updateStatus('Error starting video call.', 'error');
             }
         }
 
         // Start Video
         startVideoBtn.addEventListener('click', async () => {
-            statusDiv.textContent = 'Starting video...';
+            updateStatus('Starting video...', '');
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 localVideo.srcObject = localStream;
                 shareScreenBtn.disabled = false;
                 startVideoBtn.disabled = true;
 
-                // Add to existing peer connections
                 Object.values(peerConnections).forEach(({ pc }) => {
                     if (pc) {
                         localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
                     }
                 });
 
-                statusDiv.textContent = 'Video started.';
+                updateStatus('Video started.', 'success');
+                showToast('Video started!');
             } catch (error) {
                 console.error('Error starting video:', error);
                 if (error.name === 'NotAllowedError') {
-                    statusDiv.textContent = 'Camera/microphone access denied. Please grant permissions.';
+                    updateStatus('Camera/microphone access denied. Please grant permissions.', 'error');
                 } else {
-                    statusDiv.textContent = 'Error accessing camera/microphone.';
+                    updateStatus('Error accessing camera/microphone.', 'error');
                 }
             }
         });
@@ -701,12 +1395,10 @@
                 screenTrack = screenStream.getVideoTracks()[0];
                 const cameraTrack = localStream.getVideoTracks()[0];
 
-                // Replace video track in local stream
                 cameraTrack.enabled = false;
                 localStream.removeTrack(cameraTrack);
                 localStream.addTrack(screenTrack);
 
-                // Replace in all peer connections
                 Object.values(peerConnections).forEach(({ pc }) => {
                     const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
                     if (sender) sender.replaceTrack(screenTrack);
@@ -715,14 +1407,15 @@
                 screenTrack.onended = stopSharingScreen;
                 isSharingScreen = true;
                 shareScreenBtn.style.display = 'none';
-                stopShareBtn.style.display = 'inline';
-                statusDiv.textContent = 'Screen sharing started.';
+                stopShareBtn.style.display = 'inline-flex';
+                updateStatus('Screen sharing started.', 'success');
+                showToast('Screen sharing started!');
             } catch (error) {
                 console.error('Error sharing screen:', error);
                 if (error.name === 'NotAllowedError') {
-                    statusDiv.textContent = 'Screen sharing permission denied.';
+                    updateStatus('Screen sharing permission denied.', 'warning');
                 } else {
-                    statusDiv.textContent = 'Error sharing screen.';
+                    updateStatus('Error sharing screen.', 'error');
                 }
             }
         });
@@ -740,7 +1433,6 @@
                 const newCameraTrack = newStream.getVideoTracks()[0];
                 localStream.addTrack(newCameraTrack);
 
-                // Replace in all peer connections
                 Object.values(peerConnections).forEach(({ pc }) => {
                     const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
                     if (sender) sender.replaceTrack(newCameraTrack);
@@ -749,43 +1441,14 @@
                 localVideo.srcObject = localStream;
                 isSharingScreen = false;
                 stopShareBtn.style.display = 'none';
-                shareScreenBtn.style.display = 'inline';
-                statusDiv.textContent = 'Screen sharing stopped.';
+                shareScreenBtn.style.display = 'inline-flex';
+                updateStatus('Screen sharing stopped.', 'success');
+                showToast('Screen sharing stopped!');
             } catch (error) {
                 console.error('Error restarting camera:', error);
-                statusDiv.textContent = 'Error restarting camera after screen share.';
+                updateStatus('Error restarting camera after screen share.', 'error');
             }
         }
-
-        // Edit Minutes with debounce
-        editBtn.addEventListener('click', () => {
-            minutesContent.contentEditable = true;
-            minutesDiv.classList.add('edit-mode');
-            editBtn.style.display = 'none';
-            saveBtn.style.display = 'inline';
-            statusDiv.textContent = 'Editing minutes...';
-            isEditing = true;
-
-            if (docRef) {
-                const debouncedUpdate = debounce(() => {
-                    docRef.update({ minutes: minutesContent.textContent });
-                }, 500);
-                minutesContent.addEventListener('input', debouncedUpdate);
-            }
-        });
-
-        saveBtn.addEventListener('click', () => {
-            minutesContent.contentEditable = false;
-            minutesDiv.classList.remove('edit-mode');
-            saveBtn.style.display = 'none';
-            editBtn.style.display = 'inline';
-            statusDiv.textContent = 'Changes saved.';
-            isEditing = false;
-
-            if (docRef) {
-                docRef.update({ minutes: minutesContent.textContent });
-            }
-        });
     </script>
 </body>
 </html>
